@@ -17,6 +17,7 @@ jobs:
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v4
         with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Use the PAT here
           issue-number: ${{ github.event.issue.number }}
           body: |
             This is a multi-line test comment
