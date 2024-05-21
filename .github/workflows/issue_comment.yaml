@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
-        run: echo "${{ toJson(github.event) }}" | jq
+        run: echo "${{ toJson(github) }}" | jq
         shell: bash
 
       - name: Create comment
