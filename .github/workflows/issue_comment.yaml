@@ -4,15 +4,15 @@ on:
   issues:
     types: [opened]
 
- jobs:
-   comment-with-actions:
-     runs-on: ubuntu-latest
-     steps:
-       - name: "dump github context"
-         run: echo "${{ toJson(github.event) }}' | jq
-         shell: bash
+jobs:
+  comment-with-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Dump GitHub context"
+        run: echo "${{ toJson(github.event) }}" | jq
+        shell: bash
 
-        - name: Create comment
+      - name: Create comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.issue.number }}
