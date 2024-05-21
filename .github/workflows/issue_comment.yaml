@@ -5,12 +5,14 @@ on:
     types: [opened]
 
 jobs:
-  comment-with-actions:
+  printJob:
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
-        run: echo "${{ toJson(github) }}" | jq
-        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v4
