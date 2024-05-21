@@ -17,4 +17,10 @@ jobs:
       - name: hello world
         run: echo "Hello World"
         shell: bash
+  goodbye:
+     runs-on: ubuntu-latest
+     steps:
+       - name: goodbye_everyone
+         run: echo "Goodbye world"
+         shell: bash
     
