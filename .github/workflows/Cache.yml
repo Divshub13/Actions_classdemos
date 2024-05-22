@@ -3,17 +3,17 @@ name: Node.js Cache CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
   workflow_dispatch: # Manual trigger
     inputs:
       branch:
         description: 'Branch to run the workflow on'
         required: true
-        default: 'main'
+        default: 'master'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,5 +34,5 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: npm install
-
+        working-directory: .github/package.json
       # Build and test steps would go here

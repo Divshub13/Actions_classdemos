@@ -1,0 +1,16 @@
+{
+    "name": "my-project",
+    "version": "1.0.0",
+    "description": "My awesome project",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo 'No tests defined'"
+    },
+    "keywords": [
+      "node",
+      "javascript"
+    ],
+    "author": "Your Name",
+    "license": "MIT"
+  }
+  
