@@ -39,7 +39,6 @@ jobs:
 
   deploy:
     name: Deploy to Azure
-    needs: build_and_test
     runs-on: ubuntu-latest
 
     steps:
