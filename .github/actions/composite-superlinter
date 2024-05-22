@@ -1,0 +1,21 @@
+# File: .github/actions/super-linter/action.yml
+name: 'Super Linter Action'
+description: 'Runs Super Linter on the codebase'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Super Linter
+      uses: github/super-linter@v4
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        # Optional: Custom configuration file
+        LINTER_RULES_PATH: .github/linters/.super-linter.yml
