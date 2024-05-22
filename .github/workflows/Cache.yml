@@ -8,6 +8,12 @@ on:
     branches:
       - main
 
+  workflow_dispatch: # Manual trigger
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'main'
 jobs:
   build:
     runs-on: ubuntu-latest
