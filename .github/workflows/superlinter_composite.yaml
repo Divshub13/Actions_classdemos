@@ -1,4 +1,4 @@
-name: Lint Code Base
+name: Composite Lint Code Base
 
 on:
   push:
