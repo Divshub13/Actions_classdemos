@@ -14,6 +14,6 @@ jobs:
 
     steps:
       - name: Run Super Linter
-        uses: ./.github/actions/composite-superlinter
+        uses: ./.github/actions/composite_superlinter
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
