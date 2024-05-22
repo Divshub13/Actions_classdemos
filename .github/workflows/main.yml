@@ -1,0 +1,49 @@
+name: Test and Summarize
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        id: run-tests
+        run: |
+          npm test > test-results.txt
+          echo "Test results output to test-results.txt"
+
+      - name: Create job summary
+        id: create-summary
+        run: |
+          echo "# Test Summary" > summary.md
+          echo "## Test Results" >> summary.md
+          echo "\`\`\`" >> summary.md
+          cat test-results.txt >> summary.md
+          echo "\`\`\`" >> summary.md
+        shell: bash
+
+      - name: Upload job summary
+        run: |
+          cat summary.md >> $GITHUB_STEP_SUMMARY
+        shell: bash
+
+      - name: Upload test results as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: test-results.txt
