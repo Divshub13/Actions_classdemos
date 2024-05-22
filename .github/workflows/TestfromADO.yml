@@ -28,10 +28,13 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Publish Artifact
-        uses: actions/upload-artifact@v2
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: publish
-          path: ./bin/Release/net5.0/publish
+          path: ./publish
 
   deploy:
     needs: build
@@ -39,10 +42,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: publish
           path: ./artifacts
