@@ -22,28 +22,8 @@ jobs:
       - name: Display environment
         run: echo "Deploying to ${{ matrix.environment }} environment"
 
-      - name: Manual review
-        if: matrix.environment == 'staging'
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: pullRequests } = await github.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              base: 'master',
-              head: context.sha
-            });
-            if (pullRequests.length === 0) {
-              console.log('No open pull request found for staging deployment. Creating one...');
-              await github.pulls.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: 'Deploy to staging',
-                head: context.sha,
-                base: 'master'
-              });
-            } else {
-              console.log('Existing pull request found for staging deployment.');
-            }
+      # Add your deployment steps here, such as deploying to staging and production
+
+      # For demonstration purposes, let's just sleep for a few seconds to simulate deployment
+      - name: Simulate deployment
+        run: sleep 5
