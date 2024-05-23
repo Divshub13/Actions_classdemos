@@ -23,7 +23,7 @@ jobs:
         run: echo $JOB_VAR
 
       - name: Print env. variable
-        run: echo $VARIABLE1
+        run: echo ${{vars.VARIABLE1}}
 
       - name: Set and print step variable
         run: |
