@@ -1,0 +1,28 @@
+name: Comprehensive Environment Variables Example
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  GLOBAL_VAR: 'This is a global variable'
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+
+    env:
+      JOB_VAR: 'This is a job-specific variable'
+
+    steps:
+      - name: Print global variable
+        run: echo $GLOBAL_VAR
+
+      - name: Print job variable
+        run: echo $JOB_VAR
+
+      - name: Set and print step variable
+        run: |
+          echo "STEP_VAR=This is a step-specific variable" >> $GITHUB_ENV
+          echo $STEP_VAR
