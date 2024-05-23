@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment:
+          - staging
+          - production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to ${{ matrix.environment }}
+        # Add your deployment steps here, for example, deploying to different regions or infrastructures
+        # You can use conditional statements or separate deployment scripts based on the environment
+        run: |
+          if [ "${{ matrix.environment }}" = "staging" ]; then
+            # Deployment to staging environment
+            # Your deployment commands for staging
+            echo "Deploying to staging..."
+          elif [ "${{ matrix.environment }}" = "production" ]; then
+            # Deployment to production environment
+            # Your deployment commands for production
+            echo "Deploying to production..."
+          fi
+
+      # Add additional steps if needed, like notifications or cleanup
