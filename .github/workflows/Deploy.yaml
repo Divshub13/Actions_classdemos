@@ -21,9 +21,12 @@ jobs:
 
       - name: Request review for staging
         if: matrix.environment == 'staging'
-        uses: actions/request-reviewer@v2
-        with:
-          reviewers: 'username' # Replace 'username' with the GitHub username of the reviewer
+        run: |
+          # Create a draft pull request for staging deployment
+          git checkout -b staging-deployment
+          git add .
+          git commit -m "Deploy to staging"
+          git push origin staging-deployment
 
       - name: Display environment
         run: echo "Deploying to ${{ matrix.environment }} environment"
@@ -44,9 +47,12 @@ jobs:
 
       - name: Request review for production
         if: matrix.environment == 'production'
-        uses: actions/request-reviewer@v2
-        with:
-          reviewers: 'username' # Replace 'username' with the GitHub username of the reviewer
+        run: |
+          # Create a draft pull request for production deployment
+          git checkout -b production-deployment
+          git add .
+          git commit -m "Deploy to production"
+          git push origin production-deployment
 
       - name: Display environment
         run: echo "Deploying to ${{ matrix.environment }} environment"
