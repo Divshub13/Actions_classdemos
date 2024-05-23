@@ -8,11 +8,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: 
+      name: staging
+      url: https://example.com/deployment
 
     steps:
-     - name: Deploy
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy
         env:
           API_KEY: ${{ secrets.STAGING_API_KEY }}
         run: |
-          echo "Using API Key: $API_KEY"
+          echo "Deploying to production with API Key: $API_KEY"
+          # Your deployment script here
