@@ -6,53 +6,44 @@ on:
       - master
 
 jobs:
-  deploy_staging:
+  deploy:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        environment: [staging]
+        environment:
+          - staging
+          - production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Additional steps for building, testing, etc.
+      - name: Display environment
+        run: echo "Deploying to ${{ matrix.environment }} environment"
 
-      - name: Request review for staging
+      - name: Manual review
         if: matrix.environment == 'staging'
-        run: |
-          # Create a draft pull request for staging deployment
-          git checkout -b staging-deployment
-          git add .
-          git commit -m "Deploy to staging"
-          git push origin staging-deployment
-
-      - name: Display environment
-        run: echo "Deploying to ${{ matrix.environment }} environment"
-
-  deploy_production:
-    needs: deploy_staging
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        environment: [production]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # Additional steps for building, testing, etc.
-
-      - name: Request review for production
-        if: matrix.environment == 'production'
-        run: |
-          # Create a draft pull request for production deployment
-          git checkout -b production-deployment
-          git add .
-          git commit -m "Deploy to production"
-          git push origin production-deployment
-
-      - name: Display environment
-        run: echo "Deploying to ${{ matrix.environment }} environment"
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequests } = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'master',
+              head: context.sha
+            });
+            if (pullRequests.length === 0) {
+              console.log('No open pull request found for staging deployment. Creating one...');
+              await github.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Deploy to staging',
+                head: context.sha,
+                base: 'master'
+              });
+            } else {
+              console.log('Existing pull request found for staging deployment.');
+            }
