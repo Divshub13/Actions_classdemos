@@ -1,4 +1,4 @@
-name: Deploy to Staging
+name: Deploy
 
 on:
   push:
@@ -8,17 +8,42 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: 
-      name: staging
-      url: https://example.com/deployment
+
+    strategy:
+      matrix:
+        environment:
+          - staging
+          - production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy
-        env:
-          API_KEY: ${{ secrets.STAGING_API_KEY }}
-        run: |
-          echo "Deploying to production with API Key: $API_KEY"
-          # Your deployment script here
+      - name: Display environment
+        run: echo "Deploying to ${{ matrix.environment }} environment"
+
+      - name: Manual review
+        if: matrix.environment == 'staging'
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequests } = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'master',
+              head: context.sha
+            });
+            if (pullRequests.length === 0) {
+              console.log('No open pull request found for staging deployment. Creating one...');
+              await github.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Deploy to staging',
+                head: context.sha,
+                base: 'master'
+              });
+            } else {
+              console.log('Existing pull request found for staging deployment.');
+            }
